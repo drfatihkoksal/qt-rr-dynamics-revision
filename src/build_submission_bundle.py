@@ -9,7 +9,8 @@ from pathlib import Path
 import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT / "submission_revision_v1.0.0"
+VERSION = "v1.1.0"
+OUT = ROOT / f"submission_revision_{VERSION}"
 
 
 def sha(path: Path) -> str:
@@ -48,18 +49,36 @@ def main() -> None:
         ROOT / "revision_work/data/ltstdb_verified/SHA256SUMS.txt",
     ]
     archive_files = sorted({p for p in archive_files if p.exists() and p.is_file()})
-    archive = OUT / "reproducibility_archive_v1.0.0.zip"
+    archive = OUT / f"reproducibility_archive_{VERSION}.zip"
     with zipfile.ZipFile(archive, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9) as z:
         for p in archive_files:
             z.write(p, p.relative_to(ROOT))
-        z.writestr("ARCHIVE_VERSION.txt", "qt-revision v1.0.0\ncreated 2026-07-19\n")
+        z.writestr("ARCHIVE_VERSION.txt", f"qt-revision {VERSION}\ncreated 2026-07-19\n")
+
+    # Peer-review archive excludes author-facing documents and identity-bearing
+    # repository material while retaining the complete analysis audit trail.
+    blind_exclusions = {
+        ROOT / "paper/title_page_revised.md",
+        ROOT / "paper/cover_letter_revised.md",
+        ROOT / "revision_work/completion_audit.md",
+    }
+    blinded_files = [p for p in archive_files if p not in blind_exclusions]
+    blinded = OUT / f"blinded_review_archive_{VERSION}.zip"
+    with zipfile.ZipFile(blinded, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9) as z:
+        for p in blinded_files:
+            z.write(p, p.relative_to(ROOT))
+        z.writestr(
+            "BLINDED_ARCHIVE_README.txt",
+            "Anonymized peer-review analysis archive. Author-facing title/cover documents "
+            "and repository metadata are intentionally excluded.\n",
+        )
 
     all_outputs = sorted(p for p in OUT.iterdir()
                          if p.is_file() and p.name != "SHA256SUMS.csv")
     pd.DataFrame([{"file": p.name, "bytes": p.stat().st_size, "sha256": sha(p)}
                   for p in all_outputs]).to_csv(OUT / "SHA256SUMS.csv", index=False)
     (OUT / "README.md").write_text(
-        "# Submission revision v1.0.0\n\n"
+        f"# Submission revision {VERSION}\n\n"
         "Upload-ready DOCX documents, numbered manuscript PDF, separate lossless TIFF figures, "
         "and a versioned reproducibility archive. Raw public ECG data and multi-gigabyte derived "
         "Parquet files are excluded; official data records/checksums and download/build scripts are included.\n",

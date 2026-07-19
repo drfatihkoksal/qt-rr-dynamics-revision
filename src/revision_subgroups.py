@@ -29,6 +29,38 @@ def welch_diff(a: np.ndarray, b: np.ndarray):
     return float(est),float(est-crit*se),float(est+crit*se),float(2*stats.t.sf(abs(est/se),df))
 
 
+def subject_cluster_bootstrap_ols(data: pd.DataFrame, outcome: str,
+                                  seed: int = 20260722,
+                                  n_boot: int = 20000):
+    """OLS coefficient with unique-subject resampling of partially paired rows."""
+    cols = ["subject_id", "ischemic_indicator", "rr_smoothed_ms",
+            "dhr_dt_bpm_per_s", outcome]
+    d = data[cols].dropna().copy()
+    subjects = d.subject_id.drop_duplicates().to_numpy()
+
+    def coefficient(frame):
+        x = np.column_stack([
+            np.ones(len(frame)), frame.ischemic_indicator.to_numpy(float),
+            frame.rr_smoothed_ms.to_numpy(float),
+            frame.dhr_dt_bpm_per_s.to_numpy(float)])
+        return float(np.linalg.lstsq(x, frame[outcome].to_numpy(float), rcond=None)[0][1])
+
+    estimate = coefficient(d)
+    groups = {s: d[d.subject_id == s] for s in subjects}
+    rng = np.random.default_rng(seed)
+    boot = np.empty(n_boot)
+    for i in range(n_boot):
+        selected = rng.choice(subjects, size=len(subjects), replace=True)
+        # Temporary bootstrap IDs are unnecessary for point fitting; repeated
+        # clusters enter with multiplicity and both label rows remain together.
+        boot[i] = coefficient(pd.concat([groups[s] for s in selected], ignore_index=True))
+    lo, hi = np.quantile(boot, [.025, .975])
+    p = min(1.0, 2 * min((np.count_nonzero(boot <= 0) + 1) / (n_boot + 1),
+                         (np.count_nonzero(boot >= 0) + 1) / (n_boot + 1)))
+    counts = d.groupby("subject_id").ischemic_indicator.nunique()
+    return estimate, float(lo), float(hi), float(p), len(subjects), int((counts == 2).sum())
+
+
 def main():
     ap=argparse.ArgumentParser()
     ap.add_argument("--episode-effects",type=Path,default=Path("revision_work/analysis/episode_matched_effects.csv"))
@@ -44,6 +76,15 @@ def main():
     retained_ischemic=set(effects.loc[effects.episode_type=="ischemic","subject_id"])
     effects["has_any_retained_ischemic_episode"]=effects.subject_id.isin(retained_ischemic)
     effects=effects.merge(clinical,on="subject_id",how="left",validate="many_to_one")
+    effects["coronary_disease_status"] = effects["coronary_disease_status"].replace(
+        {"explicitly_documented_absent":
+         "no_coronary_disease_documented_in_available_header"})
+    hr_subjects=(effects[effects.episode_type=="rate_related"]
+                 [["subject_id","has_any_raw_ischemic_episode","coronary_disease_status"]]
+                 .drop_duplicates())
+    cross=(hr_subjects.groupby(["has_any_raw_ischemic_episode","coronary_disease_status"])
+           .size().rename("subjects").reset_index())
+    cross.to_csv(args.out.parent / "clinical_overlap_crosstab.csv",index=False)
     rows=[]
     hr=effects[effects.episode_type=="rate_related"].copy()
     for oi,outcome in enumerate(OUTCOMES):
@@ -99,20 +140,26 @@ def main():
                          "ci_high_ms":ci.iloc[1],"p_value":model.pvalues["state"],
                          "subjects":sub.subject_id.nunique(),"episodes":len(sub)//2})
     event=pd.DataFrame({"subject_id":effects.subject_id,
+                        "episode_type":effects.episode_type,
                         "ischemic_indicator":(effects.episode_type=="ischemic").astype(int),
                         "rr_smoothed_ms":effects.median_rr_smoothed_ms_episode,
                         "dhr_dt_bpm_per_s":effects.median_dhr_dt_bpm_per_s_episode,
                         **{outcome:effects[f"{outcome}_episode"] for outcome in OUTCOMES}}).dropna()
+    # One row per subject and label makes contribution equal within each label;
+    # unique-subject bootstrap keeps both rows for overlapping subjects.
+    subject_event=(event.groupby(["subject_id","episode_type","ischemic_indicator"],as_index=False)
+                   .agg({"rr_smoothed_ms":"mean","dhr_dt_bpm_per_s":"mean",
+                         **{outcome:"mean" for outcome in OUTCOMES}}))
     for outcome in OUTCOMES:
-        model=smf.ols(f"{outcome} ~ ischemic_indicator + rr_smoothed_ms + dhr_dt_bpm_per_s",event).fit(
-            use_t=True,cov_type="cluster",cov_kwds={"groups":event.subject_id,"use_correction":True})
-        ci=model.conf_int().loc["ischemic_indicator"]
+        est,lo,hi,p,n_subjects,n_both=subject_cluster_bootstrap_ols(
+            subject_event,outcome,seed=20260722+OUTCOMES.index(outcome))
         rows.append({"analysis":"ischemic_vs_hr_rate_dynamic_adjusted",
                      "subgroup_variable":"episode_label","subgroup":"ischemic_minus_hr",
-                     "outcome":outcome,"effect_ms":model.params["ischemic_indicator"],
-                     "ci_low_ms":ci.iloc[0],"ci_high_ms":ci.iloc[1],
-                     "p_value":model.pvalues["ischemic_indicator"],
-                     "subjects":event.subject_id.nunique(),"episodes":len(event)})
+                     "outcome":outcome,"effect_ms":est,
+                     "ci_low_ms":lo,"ci_high_ms":hi,"p_value":p,
+                     "subjects":n_subjects,"episodes":len(event),
+                     "overlapping_subjects":n_both,
+                     "model":"equal_subject_label_ols_unique_subject_bootstrap"})
     pd.DataFrame(rows).to_csv(args.out,index=False)
     print(pd.DataFrame(rows).to_string(index=False))
 

@@ -1,0 +1,7 @@
+has_any_raw_ischemic_episode,coronary_disease_status,subjects
+False,documented_present,1
+False,no_coronary_disease_documented_in_available_header,7
+False,unknown_or_insufficient,8
+True,documented_present,7
+True,no_coronary_disease_documented_in_available_header,1
+True,unknown_or_insufficient,1

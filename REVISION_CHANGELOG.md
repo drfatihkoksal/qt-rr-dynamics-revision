@@ -25,6 +25,11 @@
 
 ## Additional integrity changes
 
+- Replaced the independent-group Welch uncertainty for every equal-subject direct contrast with 20,000-draw unique-subject bootstrap inference that preserves both summaries for overlapping subjects. Under primary `.stb`, the estimate remains 4.87 ms but the 95% CI is −0.34 to 10.23 and p=0.065.
+- Disclosed that the primary scientific comparison was prespecified but the equal-subject principal inferential analysis was introduced during revision; retained the submitted −1.78-ms uncertainty-weighted beat model as a sensitivity analysis.
+- Split the cohort and rate/overlap tables, moved duration/beat counts to the Supplement, converted equations to native Word math, and placed manuscript tables in a landscape section at 8.5-point minimum type.
+- Added the 16-subject heart-rate-related-only clinical-header cross-tabulation and narrowed substrate/overlap interpretations.
+- Removed the author-identifying repository from blinded documents and created a separate blinded review archive.
 - Replaced a truncated LTST signal only after verifying the official SHA-256; reprocessed 86/86 records.
 - Mapped 86 LTST records to 80 unique subjects and repeated EDB records to documented subjects.
 - Added subject-clustered beat models, episode models, equal-subject bootstrap/permutation estimates, and nine-subject paired sensitivity.

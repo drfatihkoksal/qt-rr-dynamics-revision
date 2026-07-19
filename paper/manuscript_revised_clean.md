@@ -14,9 +14,9 @@
 
 **Methods:** A one-dimensional U-Net-style model was pretrained on the Lobachevsky University Electrocardiography Database and fine-tuned on the QT Database (QTDB). Landmark and direct-QT errors and prediction-interval coverage were evaluated in same-protocol validation data and 11 fully held-out, dual-annotated QTDB records. The model was then applied to all 86 Long-Term ST Database (LTST DB) records (80 unique subjects). Absolute and signed deviations from an individualized, hysteresis-adjusted QT–RR relation were summarized by episode and subject. The primary contrast compared database-labeled ischemic with heart-rate-related episodes; secondary contrasts used episode-matched baseline. Subject overlap, rate dynamics, hysteresis, and annotation protocols were examined in sensitivity analyses.
 
-**Results:** The primary equal-subject difference in mean absolute residual was 4.87 ms (95% confidence interval [CI], −0.73 to 10.46; p=0.087) for ischemic versus heart-rate-related episodes; thus, a larger ischemic departure was not demonstrated. Relative to matched baseline, absolute residual increased by 7.67 ms (95% CI, 5.06 to 10.95) during 1,060 ischemic episodes from 60 subjects and by 4.57 ms (95% CI, 2.34 to 6.90) during 218 heart-rate-related episodes from 25 subjects. Nine of 25 subjects contributing retained heart-rate-related episodes also had an annotated ischemic episode; these subjects contributed 58/218 (26.6%) heart-rate-related episodes. The overlap interaction was imprecise (2.54 ms; 95% CI, −2.50 to 7.57; p=0.305). Rate-dynamic adjustment attenuated the heart-rate-related-versus-baseline estimate to 2.23 ms (95% CI, −0.50 to 4.97). Direct-QT 95% interval coverage under the independence approximation was 96.7% in same-protocol validation and 90.6% and 95.3% in the two held-out annotation sets; covariance-aware coverage was 90.5%, 85.2%, and 92.0%, respectively.
+**Results:** Under the primary `.stb` annotation protocol, the equal-subject difference in mean absolute residual was 4.87 ms (95% confidence interval [CI], −0.34 to 10.23; p=0.065) for ischemic versus heart-rate-related episodes; unique-subject bootstrap retained both summaries for nine overlapping subjects. A larger ischemic departure was not demonstrated under the primary protocol, although estimates were annotation-protocol sensitive. Relative to matched baseline, absolute residual increased by 7.67 ms (95% CI, 5.06 to 10.95) during 1,060 ischemic episodes from 60 subjects and by 4.57 ms (95% CI, 2.34 to 6.90) during 218 heart-rate-related episodes from 25 subjects. Nine of 25 subjects contributing retained heart-rate-related episodes also had an annotated ischemic episode; these subjects contributed 58/218 (26.6%) heart-rate-related episodes. The overlap interaction was imprecise (2.54 ms; 95% CI, −2.50 to 7.57; p=0.305). Rate-dynamic adjustment attenuated the heart-rate-related-versus-baseline estimate to 2.23 ms (95% CI, −0.50 to 4.97), and the adjusted direct estimate was 3.47 ms (95% CI, −1.51 to 7.69). Direct-QT 95% interval coverage under the independence approximation was 96.7% in same-protocol validation and 90.6% and 95.3% in the two held-out annotation sets; covariance-aware coverage was 90.5%, 85.2%, and 92.0%, respectively.
 
-**Conclusions:** Both database-labeled episode types were associated with greater absolute QT–RR departure than matched baseline, whereas the direct comparison did not demonstrate a larger departure during ischemic episodes. This does not exclude an ischemic repolarization effect or establish physiological equivalence. ECG-based label uncertainty, subject-level overlap and substrate, and residual rate/hysteresis effects constrain mechanistic interpretation. Prediction-interval transportability was limited on fully held-out records.
+**Conclusions:** Both database-labeled episode types were associated with greater absolute QT–RR departure than matched baseline. Under the primary `.stb` protocol, the direct comparison did not demonstrate a larger departure during ischemic episodes, although estimates were annotation-protocol sensitive. This does not exclude an ischemic repolarization effect or establish physiological equivalence. ECG-based label uncertainty, subject-level overlap and substrate, and residual rate/hysteresis effects constrain mechanistic interpretation. Prediction-interval transportability was limited on fully held-out records.
 
 **Keywords:** electrocardiography; QT interval; myocardial ischemia; deep learning; uncertainty; ambulatory monitoring
 
@@ -46,15 +46,15 @@ The total loss was cross-entropy segmentation loss plus five times the presence-
 
 Normal-beat annotations anchored the windows. Predictions required presence probability >0.5 for both QRS onset and T offset. QT was their time difference. The submitted independence approximation was
 
-\[
+$$
 \sigma_{QT,ind}^2=\sigma_T^2+\sigma_Q^2.
-\]
+$$
 
 Because the two landmark errors arise from the same beat and model, validation data were also used to estimate their standardized error correlation, giving
 
-\[
+$$
 \sigma_{QT,cov}^2=\sigma_T^2+\sigma_Q^2-2\rho\sigma_T\sigma_Q.
-\]
+$$
 
 The correlation was estimated only in same-protocol validation data and applied unchanged to held-out data. We report direct-QT mean absolute error (MAE), median absolute error, bias, root mean squared error, and empirical prediction-interval coverage. These checks do not establish calibration in LTST DB or EDB, where beat-level expert QT ground truth was unavailable.
 
@@ -66,9 +66,9 @@ For each record-lead, eligible non-episode beats fitted an individualized linear
 
 ### 2.5 Outcomes and statistics
 
-The prespecified primary estimand was the equal-subject mean difference in absolute residual between ischemic and heart-rate-related episodes. Major secondary estimands compared each label with matched baseline. The analysis hierarchy comprised: beat-level regression with subject-clustered uncertainty; one-summary-per-episode models clustered by subject; equal-subject summaries with subject bootstrap or permutation inference; and a paired sensitivity restricted to subjects with both labels. Both unweighted and inverse-variance weighted beat models were reported. The three equal-subject mean-absolute contrasts formed one Benjamini–Hochberg false-discovery-rate family; other analyses were labeled sensitivity or exploratory. Confidence intervals were emphasized, and non-significance was not interpreted as equivalence.
+The ischemic-versus-heart-rate-related contrast was the prespecified primary scientific comparison. In response to concerns regarding unequal beat contribution and patient-level confounding, the revision designated the equal-subject estimate as the principal inferential analysis. Each label-specific subject summary received equal weight within its label group. Because nine subjects contributed to both groups, 20,000 bootstrap samples were drawn from the 76 unique subjects; both label-specific summaries were retained whenever an overlapping subject was selected. Percentile confidence intervals and two-sided bootstrap tail probabilities were calculated from that distribution. The originally submitted uncertainty-weighted beat-level model was retained as a sensitivity analysis. Major secondary estimands compared each label with matched baseline. The analysis hierarchy additionally comprised one-summary-per-episode models clustered by subject and a paired sensitivity restricted to both-label subjects. Both unweighted and inverse-variance-weighted beat models were reported. The three equal-subject mean-absolute contrasts formed one Benjamini–Hochberg false-discovery-rate family; other analyses were labeled sensitivity or exploratory. Confidence intervals were emphasized, and non-significance was not interpreted as equivalence.
 
-Reviewer-requested analyses stratified heart-rate-related episodes by any raw annotated ischemic episode and by any retained ischemic episode, tested an episode-state-by-overlap interaction, and explored historical header evidence of coronary disease (documented, explicitly documented absent, or unknown). Missing documentation was not treated as absence. Sensitivities included signed outcomes, alternative hysteresis constants, `.sta/.stb/.stc` protocols, rate-dynamic adjustment, cross-lead concordance, and EDB generic ST episodes. The ECG examples were selected reproducibly as episodes closest to the prespecified subgroup median, not as maximum effects.
+Reviewer-requested analyses stratified heart-rate-related episodes by any raw annotated ischemic episode and by any retained ischemic episode, tested an episode-state-by-overlap interaction, and explored historical header evidence of coronary disease (documented, no coronary disease documented in the available header, or unknown). Missing documentation was not treated as disease absence. Sensitivities included signed outcomes, alternative hysteresis constants, `.sta/.stb/.stc` protocols, rate-dynamic adjustment, cross-lead concordance, and EDB generic ST episodes. Direct contrasts across protocols, hysteresis specifications, and rate adjustment used unique-subject resampling that retained both labels for overlapping subjects. The ECG examples were selected reproducibly as episodes closest to the prespecified subgroup median, not as maximum effects.
 
 ## 3. Results
 
@@ -84,17 +84,17 @@ Among 25 subjects contributing retained heart-rate-related episodes, 9 (36.0%) a
 
 ### 3.3 Primary and baseline contrasts
 
-In the primary direct comparison, the equal-subject difference in mean absolute QT–RR residual was 4.87 ms (95% CI, −0.73 to 10.46; p=0.087; adjusted p=0.087) for ischemic versus heart-rate-related episodes. The interval admitted effects in both directions and did not demonstrate a larger ischemic residual. The episode-level estimate was 5.63 ms (95% CI, −2.90 to 14.15; p=0.193). The paired analysis of nine both-label subjects was −1.36 ms (95% CI, −9.27 to 5.64; p=0.770), and was necessarily imprecise.
+Under the primary `.stb` protocol, the equal-subject difference in mean absolute QT–RR residual was 4.87 ms (95% CI, −0.34 to 10.23; p=0.065; adjusted p=0.065) for ischemic versus heart-rate-related episodes. The unique-subject bootstrap treated the 76 subjects as independent clusters and retained both label summaries for the nine overlapping subjects. The interval admitted effects in both directions and did not demonstrate a larger ischemic residual. The episode-level estimate was 5.63 ms (95% CI, −2.90 to 14.15; p=0.193). The paired analysis of nine both-label subjects was −1.36 ms (95% CI, −9.27 to 5.64; p=0.770), and was necessarily imprecise.
 
 Relative to matched baseline, the equal-subject absolute residual increased during ischemic episodes by 7.67 ms (95% CI, 5.06 to 10.95; adjusted p<0.001) and during heart-rate-related episodes by 4.57 ms (95% CI, 2.34 to 6.90; adjusted p<0.001). Episode-level estimates were 6.96 ms (95% CI, 2.17 to 11.75) and 3.89 ms (95% CI, 1.39 to 6.40), respectively. Beat-level subject-clustered estimates were positive for both baseline contrasts under unweighted and uncertainty-weighted models, while the direct beat contrast was near zero. Thus the principal conclusion did not depend solely on beat count or weighting (Table 3; Fig. 2).
 
 ### 3.4 Subgroups, direction, and sensitivities
 
-Heart-rate-related episodes versus baseline increased equal-subject mean absolute residual by 6.20 ms (95% CI, 3.00 to 9.68) among the nine subjects with any raw ischemic annotation and by 3.66 ms (95% CI, 0.78 to 6.67) among the 16 without one. The interaction was 2.54 ms (95% CI, −2.50 to 7.57; p=0.305), providing no precise evidence that overlap modified the association. Exploratory historical-header strata yielded 8.74 ms in eight subjects with documented coronary disease, 0.38 ms in eight with explicitly documented absence, and 4.61 ms in nine with insufficient/unknown documentation; incomplete metadata preclude causal interpretation.
+Heart-rate-related episodes versus baseline increased equal-subject mean absolute residual by 6.20 ms (95% CI, 3.00 to 9.68) among the nine subjects with any raw ischemic annotation and by 3.66 ms (95% CI, 0.78 to 6.67) among the 16 without one. The interaction was 2.54 ms (95% CI, −2.50 to 7.57; p=0.305), providing no precise evidence that overlap modified the association. Among those 16 subjects without an annotated ischemic episode, historical headers indicated documented coronary disease in one, no coronary disease documented in the available header in seven, and unknown/insufficient information in eight. Across all 25 heart-rate-related contributors, exploratory historical-header strata yielded 8.74 ms in eight subjects with documented coronary disease, 0.38 ms in eight with no coronary disease documented in the available header, and 4.61 ms in nine with insufficient/unknown information. These incomplete historical data cannot establish substrate or episode mechanism.
 
 Signed-residual contrasts were not consistently directional. Median episode residual was negative in 545/1,060 (51.4%) ischemic episodes and 126/218 (57.8%) heart-rate-related episodes. Subject-level direct signed contrasts included zero. The absolute-residual findings therefore reflect a mixture of positive and negative departures rather than uniform QT prolongation.
 
-Rate-dynamic adjustment preserved the ischemic-versus-baseline association (5.51 ms; 95% CI, 2.92 to 8.10) but attenuated the heart-rate-related-versus-baseline estimate (2.23 ms; 95% CI, −0.50 to 4.97). Direct estimates varied across reasonable hysteresis assumptions: 4.87 ms under individualized primary `.stb`, 4.36 ms with the expanded grid, and 1.64–4.66 ms across fixed 30–180 s constants; all corresponding intervals included zero. Alternative annotation streams produced direct estimates of 5.97 ms (`.sta`) and 6.36 ms (`.stc`) whose intervals excluded zero, demonstrating protocol dependence rather than a uniformly stable specificity result. Primary tau selection accumulated at 10 s in 71/190 record-leads and at 300 s in 15/190, supporting the expanded-grid sensitivity. Cross-lead auditing identified 405 concordant multilead ischemic segments, 60 concordant heart-rate-related segments, and three discordant segments.
+Rate-dynamic adjustment preserved the ischemic-versus-baseline association (5.51 ms; 95% CI, 2.92 to 8.10) but attenuated the heart-rate-related-versus-baseline estimate (2.23 ms; 95% CI, −0.50 to 4.97). The equal-subject, rate-adjusted direct estimate was 3.47 ms (95% CI, −1.51 to 7.69; p=0.182) using the same unique-subject bootstrap structure. Direct estimates varied across reasonable hysteresis assumptions: 4.87 ms under individualized primary `.stb`, 4.36 ms with the expanded grid, and 1.64–4.66 ms across fixed 30–180 s constants; all corresponding intervals included zero. Alternative annotation streams produced direct estimates of 5.97 ms (95% CI, 1.86 to 10.34; `.sta`) and 6.36 ms (95% CI, 0.72 to 12.20; `.stc`), demonstrating protocol dependence rather than a uniformly stable specificity result. Primary tau selection accumulated at 10 s in 71/190 record-leads and at 300 s in 15/190, supporting the expanded-grid sensitivity. Cross-lead auditing identified 405 concordant multilead ischemic segments, 60 concordant heart-rate-related segments, and three discordant segments.
 
 ### 3.5 EDB and ECG examples
 
@@ -104,11 +104,11 @@ Figure 1 shows raw ECG morphology, model landmarks and uncertainty, QT–RR resi
 
 ## 4. Discussion
 
-The study separates three findings. Database-labeled ischemic episodes showed larger absolute QT–RR departure than matched baseline. Heart-rate-related episodes also showed larger departure than baseline. The direct equal-subject comparison did not demonstrate a larger departure in ischemic episodes. This narrow null does not imply that ischemia has no ventricular-repolarization effect and does not establish that the episode types are physiologically equivalent; its CI included both a modest ischemic excess and a modest heart-rate-related excess.
+The study separates three findings. Database-labeled ischemic episodes showed larger absolute QT–RR departure than matched baseline. Heart-rate-related episodes also showed larger departure than baseline. Under the primary `.stb` annotation protocol, the direct equal-subject comparison did not demonstrate a larger departure in ischemic episodes; estimates were sensitive to the annotation protocol. This narrow primary-protocol result does not imply that ischemia has no ventricular-repolarization effect and does not establish that the episode types are physiologically equivalent; its CI included both a modest ischemic excess and a modest heart-rate-related excess.
 
 Label meaning is central. LTST labels classify ST morphology in heart-rate context, but do not independently confirm or exclude myocardial ischemia at every episode. “Heart-rate-related” describes the ST/heart-rate pattern, not complete explanation of simultaneous QT behavior by RR. Label ambiguity, shared autonomic activation, incomplete QT adaptation modeling, cardiac substrate, and morphology-dependent delineation error therefore remain plausible, non-exclusive explanations.
 
-Same-subject overlap was material but not dominant: nine of 25 heart-rate-related contributors also had ischemic annotations, accounting for about 27% of retained heart-rate-related episodes and beats. The heart-rate-related baseline association was present in both overlap strata and their interaction was imprecise. This argues against attributing the full result to overlap alone. Conversely, historical headers suggested substantial coronary substrate even among subjects without annotated ischemic episodes; those exploratory fields were incomplete and cannot determine episode cause. “No annotated ischemic episode” is therefore not synonymous with “non-ischemic patient.”
+Same-subject overlap was material: nine of 25 heart-rate-related contributors also had ischemic annotations, accounting for about 27% of retained heart-rate-related episodes and beats. Similar unadjusted associations in both overlap strata suggest that same-subject overlap may not be the sole explanation. However, the imprecise interaction and attenuation after rate-dynamic adjustment preclude a firm conclusion regarding the relative contributions of overlap, cardiac substrate, label uncertainty, and residual rate dynamics. Historical headers indicated heterogeneous coronary substrate among subjects contributing heart-rate-related episodes, but were incomplete and could not establish episode mechanism. “No annotated ischemic episode” is therefore not synonymous with “non-ischemic patient.”
 
 Rate dynamics provided a second caution. Adjustment for dynamic rate attenuated the heart-rate-related baseline association until its CI included zero, whereas the ischemic baseline estimate remained positive. Direct effects changed with annotation protocol and hysteresis choices. These results make residual rate/hysteresis confounding plausible and oppose selecting one favorable specification. A more flexible dynamic QT–RR model and independently adjudicated episodes would be needed to distinguish rate adaptation from other processes.
 
@@ -124,11 +124,11 @@ Episode labels were ECG-based and did not independently verify ischemia. Episode
 
 ## 5. Conclusions
 
-An uncertainty-aware deep-learning delineator enabled large-scale analysis of ambulatory QT–RR dynamics, although interval coverage deteriorated on fully held-out records. Both database-labeled ischemic and heart-rate-related ST episodes were associated with greater absolute departure than matched baseline. The direct comparison did not demonstrate a larger departure during ischemic episodes. Because labels were ECG-based and episode type was partly confounded by subject, substrate, and rate dynamics, these findings neither establish physiological equivalence nor exclude an ischemia-specific component. Replication with independent ischemia adjudication and stronger within-subject sampling is required.
+An uncertainty-aware deep-learning delineator enabled large-scale analysis of ambulatory QT–RR dynamics, although interval coverage deteriorated on fully held-out records. Both database-labeled ischemic and heart-rate-related ST episodes were associated with greater absolute departure than matched baseline. Under the primary `.stb` annotation protocol, the direct comparison did not demonstrate a larger departure during ischemic episodes; estimates were sensitive to the annotation protocol. Because labels were ECG-based and episode type was partly confounded by subject, substrate, and rate dynamics, these findings neither establish physiological equivalence nor exclude an ischemia-specific component. Replication with independent ischemia adjudication and stronger within-subject sampling is required.
 
 ## Data and code availability
 
-All source datasets are publicly available through PhysioNet. The complete analysis code, machine-readable result manifest, frozen checksums, figure/table source data, and versioned reproducibility archive are publicly available in release v1.0.0 at https://github.com/drfatihkoksal/qt-rr-dynamics-revision/releases/tag/v1.0.0.
+All source datasets are publicly available through PhysioNet. A blinded, versioned review archive containing the complete analysis code, tests, machine-readable result manifest, frozen checksums, and figure/table source data is supplied with the submission. The permanent public repository and release are identified on the separate title page.
 
 ## Declaration of generative AI and AI-assisted technologies
 
@@ -164,20 +164,27 @@ During preparation, the author used Claude (Anthropic) and Codex (OpenAI) to ass
 
 ![](figures_revision/figure3_calibration.png)
 
+```{=latex}
+\clearpage
+\newgeometry{landscape,margin=0.65in}
+\small
+\setlength{\tabcolsep}{3pt}
+```
+
 ## Tables
 
 **Table 1. Retained cohort composition and subject-level overlap.**
 
-| Subject group | Subjects | Records | Record-leads | Ischemic episodes | HR-related episodes | Ischemic duration (s) | HR duration (s) | Ischemic beats | HR beats |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| Both labels | 9 | 9 | 20 | 62 | 58 | 59,982 | 51,295 | 92,807 | 76,043 |
-| Ischemic only | 51 | 57 | 130 | 998 | 0 | 612,115 | 0 | 927,377 | 0 |
-| HR-related only | 16 | 16 | 32 | 0 | 160 | 0 | 121,149 | 0 | 202,952 |
-| Neither retained | 4 | 4 | 8 | 0 | 0 | 0 | 0 | 0 | 0 |
+| Subject group | Subjects | Records | Record-leads | Ischemic episodes | HR-related episodes |
+|---|---:|---:|---:|---:|---:|
+| Both labels | 9 | 9 | 20 | 62 | 58 |
+| Ischemic only | 51 | 57 | 130 | 998 | 0 |
+| HR-related only | 16 | 16 | 32 | 0 | 160 |
+| Neither retained | 4 | 4 | 8 | 0 | 0 |
 
 **Table 2. Direct-QT accuracy and 95% prediction-interval coverage.**
 
-| Set | n | MAE (ms) | Median AE (ms) | Bias (ms) | RMSE (ms) | PICP independence | PICP covariance-aware |
+| Set | n | MAE (ms) | Median AE (ms) | Bias (ms) | RMSE (ms) | Coverage, independent | Coverage, covariance-aware |
 |---|---:|---:|---:|---:|---:|---:|---:|
 | Same-protocol validation | 391 | 23.89 | 18.01 | −3.48 | 30.96 | 0.967 | 0.905 |
 | Fully held-out, annotator 1 | 487 | 29.52 | 21.70 | +3.28 | 39.17 | 0.906 | 0.852 |
@@ -187,21 +194,26 @@ During preparation, the author used Claude (Anthropic) and Codex (OpenAI) to ass
 
 | Contrast | Level/weighting | Effect (ms) | 95% CI (ms) | p | Adjusted p | Subjects | Episodes |
 |---|---|---:|---:|---:|---:|---:|---:|
-| Ischemic vs HR-related | Equal subject | 4.87 | −0.73 to 10.46 | 0.087 | 0.087 | 76 | 1,278 |
+| Ischemic vs HR-related | Equal subject; partially paired bootstrap | 4.87 | −0.34 to 10.23 | 0.065 | 0.065 | 76 | 1,278 |
 | Ischemic vs baseline | Equal subject | 7.67 | 5.06 to 10.95 | <0.001 | <0.001 | 60 | 1,060 |
 | HR-related vs baseline | Equal subject | 4.57 | 2.34 to 6.90 | <0.001 | <0.001 | 25 | 218 |
 | Ischemic vs HR-related | Paired equal subject | −1.36 | −9.27 to 5.64 | 0.770 | — | 9 | — |
 | Ischemic vs HR-related | Episode, subject-clustered | 5.63 | −2.90 to 14.15 | 0.193 | — | 76 | 1,278 |
 
-**Table 4. Reviewer-requested subgroup and rate-dynamic analyses.**
+**Table 4A. Reviewer-requested overlap subgroup analyses.**
 
 | Analysis | Group/contrast | Effect (ms) | 95% CI (ms) | p | Subjects | Episodes |
 |---|---|---:|---:|---:|---:|---:|
 | HR vs baseline | Any raw ischemic episode | 6.20 | 3.00 to 9.68 | — | 9 | 58 |
 | HR vs baseline | No annotated ischemic episode | 3.66 | 0.78 to 6.67 | — | 16 | 160 |
 | Interaction | Difference between overlap groups | 2.54 | −2.50 to 7.57 | 0.305 | 25 | 218 |
+
+**Table 4B. Rate-dynamic analyses.**
+
+| Analysis | Contrast | Effect (ms) | 95% CI (ms) | p | Subjects | Episodes |
+|---|---|---:|---:|---:|---:|---:|
 | Rate-dynamic adjusted | Ischemic vs baseline | 5.51 | 2.92 to 8.10 | <0.001 | 60 | 1,060 |
 | Rate-dynamic adjusted | HR vs baseline | 2.23 | −0.50 to 4.97 | 0.110 | 25 | 218 |
-| Rate-dynamic adjusted | Ischemic vs HR-related | 5.93 | −0.33 to 12.20 | 0.063 | 76 | 1,278 |
+| Rate-dynamic adjusted | Ischemic vs HR-related | 3.47 | −1.51 to 7.69 | 0.182 | 76 | 1,278 |
 
-The complete editable source tables are supplied in `paper/tables_revision/`; rows displayed here are not substitutes for the machine-readable full outputs.
+Positive values indicate a larger mean absolute residual in the first-named group.

@@ -44,7 +44,7 @@ def results_manifest() -> pd.DataFrame:
     specs = [
         (ANA / "hierarchical_effects.csv", "revision_statistics.py", "LTST"),
         (ANA / "subgroup_effects.csv", "revision_subgroups.py", "LTST subgroup"),
-        (ANA / "sensitivity_effects.csv", "revision_residual_reanalysis.py", "LTST sensitivity"),
+        (ANA / "sensitivity_effects.csv", "revision_specifications.py", "LTST sensitivity"),
         (ANA / "edb_hierarchical_effects.csv", "revision_edb_statistics.py", "EDB"),
     ]
     for path, script, family in specs:
@@ -163,6 +163,7 @@ def main() -> None:
     copy_table("table2_direct_qt_coverage.csv", ANA / "direct_qt_picp.csv")
     copy_table("table3_primary_estimands.csv", ANA / "hierarchical_effects.csv")
     copy_table("table4_subgroups.csv", ANA / "subgroup_effects.csv")
+    copy_table("tableS_clinical_overlap_crosstab.csv", ANA / "clinical_overlap_crosstab.csv")
     copy_table("tableS_hysteresis_protocol.csv", ANA / "sensitivity_effects.csv")
     copy_table("tableS_cross_lead.csv", AUD / "cross_lead_concordance_stb.csv")
     copy_table("tableS_edb.csv", ANA / "edb_hierarchical_effects.csv")

@@ -6,7 +6,7 @@ Versioned code, statistical outputs, source data, and manuscript-supporting mate
 
 ## Scientific scope
 
-The primary endpoint compares the equal-subject mean absolute QT–RR residual between database-labeled ischemic and database-labeled heart-rate-related ST episodes. The revision preserves the null interpretation narrowly: no larger ischemic departure was demonstrated, and the result is neither an equivalence finding nor evidence that ischemia has no repolarization effect.
+The primary endpoint compares the equal-subject mean absolute QT–RR residual between database-labeled ischemic and database-labeled heart-rate-related ST episodes. Because nine subjects contribute to both label groups, v1.1.0 uses a 20,000-draw unique-subject bootstrap that retains both label-specific summaries whenever an overlapping subject is selected. Under the primary `.stb` protocol, the 4.87-ms estimate has a 95% confidence interval of −0.34 to 10.23 ms (p=0.065). No larger ischemic departure was demonstrated under that protocol; this is neither an equivalence finding nor evidence that ischemia has no repolarization effect, and alternative annotation protocols were sensitive.
 
 ## Repository contents
 
@@ -32,7 +32,7 @@ conda activate qt-revision-2026-07-19
 Run the critical test and syntax checks:
 
 ```bash
-pytest -q tests/test_revision_pipeline.py
+python -m pytest -q tests/test_revision_pipeline.py --import-mode=importlib
 python -m py_compile src/*.py
 ```
 
@@ -53,7 +53,7 @@ All ECG datasets are public through PhysioNet: LUDB v1.0.1, QTDB v1.0.0, Long-Te
 
 ## Versioning
 
-The manuscript revision uses release `v1.0.0`. The release asset contains the exact reproducibility archive supplied with the revision. SHA-256 manifests provide integrity checks where Git history was unavailable during the original local audit.
+The corrected manuscript revision uses release `v1.1.0`. It supersedes v1.0.0 for the direct equal-subject confidence intervals and p values. The release asset contains the exact author-facing reproducibility archive; a separately anonymized review archive is supplied through the journal submission. SHA-256 manifests provide integrity checks where Git history was unavailable during the original local audit.
 
 ## License
 

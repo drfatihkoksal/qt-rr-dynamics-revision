@@ -3,13 +3,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 from scipy import stats
-
-
-def welch(a,b):
-    a=np.asarray(a,float);b=np.asarray(b,float);est=a.mean()-b.mean()
-    va=a.var(ddof=1)/len(a);vb=b.var(ddof=1)/len(b);se=np.sqrt(va+vb)
-    df=(va+vb)**2/(va**2/(len(a)-1)+vb**2/(len(b)-1));c=stats.t.ppf(.975,df)
-    return est,est-c*se,est+c*se,2*stats.t.sf(abs(est/se),df)
+from revision_statistics import partially_paired_subject_bootstrap
 
 
 def one_sample(subject_values):
@@ -34,10 +28,14 @@ def main():
                 rows.append({'specification':spec,'contrast':name,'outcome':outcome,'effect_ms':est,
                              'ci_low_ms':lo,'ci_high_ms':hi,'p_value':p,'subjects':len(sv),'episodes':len(sub)})
             sm=events.groupby(['subject_id','episode_type'])[outcome].mean().unstack()
-            a=sm.ischemic.dropna();b=sm.rate_related.dropna();est,lo,hi,p=welch(a,b)
+            est,lo,hi,p,n_unique,n_isc,n_hr,n_both=partially_paired_subject_bootstrap(
+                sm,outcome,seed=20260721)
             rows.append({'specification':spec,'contrast':'ischemic_vs_hr','outcome':outcome,
                          'effect_ms':est,'ci_low_ms':lo,'ci_high_ms':hi,'p_value':p,
-                         'subjects':len(a.index.union(b.index)),'episodes':len(events)})
+                         'subjects':n_unique,'episodes':len(events),
+                         'ischemic_subjects':n_isc,'hr_subjects':n_hr,
+                         'overlapping_subjects':n_both,
+                         'model':'partially_paired_unique_subject_bootstrap'})
     out=pd.DataFrame(rows);out.to_csv('revision_work/analysis/sensitivity_effects.csv',index=False)
     tau=(e[['specification','record','subject_id','lead','tau_s','baseline_cv_r2']]
          .drop_duplicates().sort_values(['specification','record','lead']))

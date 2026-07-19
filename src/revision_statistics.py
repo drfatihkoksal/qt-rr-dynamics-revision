@@ -7,7 +7,6 @@ multi-gigabyte CSV never needs to be loaded into memory.
 from __future__ import annotations
 
 import argparse
-import math
 from pathlib import Path
 
 import duckdb
@@ -160,6 +159,47 @@ def subject_bootstrap(values: pd.DataFrame, value: str, seed: int = 20260719,
     return estimate, float(lo), float(hi), p
 
 
+def partially_paired_subject_bootstrap(
+        subject_label: pd.DataFrame, value: str,
+        ischemic_col: str = "ischemic", hr_col: str = "rate_related",
+        seed: int = 20260721, n_boot: int = 20000
+) -> tuple[float, float, float, float, int, int, int, int]:
+    """Equal-label-mean contrast with unique-subject cluster bootstrap.
+
+    Rows are indexed by unique subject and columns contain label-specific
+    summaries. Resampling a subject retains both values when both are present,
+    thereby respecting the partially paired design while preserving the
+    estimand (mean ischemic-subject summary minus mean HR-subject summary).
+    The two-sided p value is the bootstrap tail probability around zero.
+    """
+    wide = subject_label[[ischemic_col, hr_col]].copy()
+    wide = wide.loc[wide.notna().any(axis=1)]
+    a = wide[ischemic_col].to_numpy(float)
+    b = wide[hr_col].to_numpy(float)
+    estimate = float(np.nanmean(a) - np.nanmean(b))
+    rng = np.random.default_rng(seed)
+    n = len(wide)
+    draws = []
+    while sum(len(x) for x in draws) < n_boot:
+        batch = min(2000, n_boot - sum(len(x) for x in draws) + 200)
+        idx = rng.integers(0, n, size=(batch, n))
+        aa, bb = a[idx], b[idx]
+        na, nb = np.isfinite(aa).sum(axis=1), np.isfinite(bb).sum(axis=1)
+        vals = np.full(batch, np.nan)
+        valid = (na > 0) & (nb > 0)
+        vals[valid] = (np.nansum(aa[valid], axis=1) / na[valid] -
+                       np.nansum(bb[valid], axis=1) / nb[valid])
+        draws.append(vals[np.isfinite(vals)])
+    boot = np.concatenate(draws)[:n_boot]
+    lo, hi = np.quantile(boot, [0.025, 0.975])
+    p = float(min(1.0, 2 * min(
+        (np.count_nonzero(boot <= 0) + 1) / (n_boot + 1),
+        (np.count_nonzero(boot >= 0) + 1) / (n_boot + 1))))
+    return (estimate, float(lo), float(hi), p, n,
+            int(np.isfinite(a).sum()), int(np.isfinite(b).sum()),
+            int((np.isfinite(a) & np.isfinite(b)).sum()))
+
+
 def hierarchical_results(ep: pd.DataFrame, effects: pd.DataFrame) -> list[dict]:
     rows = []
     for kind, name in (("ischemic", "ischemic_vs_baseline"),
@@ -206,22 +246,17 @@ def hierarchical_results(ep: pd.DataFrame, effects: pd.DataFrame) -> list[dict]:
                      "independent_subjects": direct.subject_id.nunique(),
                      "episodes": len(direct)})
         sm = event.groupby(["subject_id", "episode_type"])[col].mean().unstack()
-        # Equal weight within each label; Welch interval is explicit because
-        # most subjects contribute only one label.
-        a, b = sm.ischemic.dropna(), sm.rate_related.dropna()
-        est = float(a.mean() - b.mean())
-        se = math.sqrt(a.var(ddof=1)/len(a) + b.var(ddof=1)/len(b))
-        df = (a.var(ddof=1)/len(a) + b.var(ddof=1)/len(b))**2 / (
-            (a.var(ddof=1)/len(a))**2/(len(a)-1) +
-            (b.var(ddof=1)/len(b))**2/(len(b)-1))
-        crit = stats.t.ppf(.975, df)
+        est, lo, hi, p, n_unique, n_isc, n_hr, n_both = (
+            partially_paired_subject_bootstrap(sm, col))
         rows.append({"contrast": "ischemic_vs_hr", "analysis_level": "subject_equal_weight",
-                     "model": "welch_between_subject", "weighting": "equal_subject",
-                     "outcome": col, "effect_ms": est, "ci_low_ms": est-crit*se,
-                     "ci_high_ms": est+crit*se,
-                     "p_value": 2*stats.t.sf(abs(est/se), df),
-                     "independent_subjects": len(a.index.union(b.index)),
-                     "ischemic_subjects": len(a), "hr_subjects": len(b)})
+                     "model": "partially_paired_unique_subject_bootstrap",
+                     "weighting": "equal_subject_within_label",
+                     "outcome": col, "effect_ms": est, "ci_low_ms": lo,
+                     "ci_high_ms": hi, "p_value": p,
+                     "independent_subjects": n_unique,
+                     "ischemic_subjects": n_isc, "hr_subjects": n_hr,
+                     "overlapping_subjects": n_both,
+                     "cluster_correction": "20,000 unique-subject bootstrap draws; both labels retained"})
         both = sm.dropna()
         diff = (both.ischemic - both.rate_related).rename("difference").reset_index()
         est, lo, hi, p = subject_bootstrap(diff, "difference", seed=20260720)
