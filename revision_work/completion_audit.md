@@ -32,8 +32,8 @@ Audited against `revision.md` on 2026-07-19. “Complete” means direct current
 | Exact response page/line references | Complete | `response_to_reviewers.md`; references correspond to 14-page numbered PDF |
 | Placeholder/prohibited-claim QA | Complete | `revision_work/submission_QA.md`; quoted reviewer language excepted |
 | Versioned upload bundle/archive | Complete | `submission_revision_v1.0.0/`, `SHA256SUMS.csv`, validated ZIP |
-| Persistent public repository URL/version | **External pending** | No Git remote; local `gh` credential for `drfatihkoksal` is invalid. Publishing an external repository requires account reauthentication and user authorization. No URL was invented. |
+| Persistent public repository URL/version | Complete | Public repository and release v1.0.0: https://github.com/drfatihkoksal/qt-rr-dynamics-revision/releases/tag/v1.0.0 |
 
 ## Completion conclusion
 
-All analyses, documents, figures, tables, source data, line references, local archive, and QA gates are complete. The package is not yet fully compliant with the explicit “real, versioned repository link before resubmission” condition. Completion can be established only after a public repository or archive DOI is created, its URL is inserted into Data and Code Availability and Reviewer 1 response, DOCX/PDF files are regenerated, and the final checksums are refreshed.
+All analyses, documents, figures, tables, source data, line references, versioned public repository, local archive, and QA gates are complete. The persistent release URL is included in Data and Code Availability, the response letter, and the cover letter; regenerated submission artifacts and checksums are tied to v1.0.0.

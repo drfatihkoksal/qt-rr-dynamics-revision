@@ -128,7 +128,7 @@ An uncertainty-aware deep-learning delineator enabled large-scale analysis of am
 
 ## Data and code availability
 
-All source datasets are publicly available through PhysioNet. The complete analysis code, machine-readable result manifest, frozen checksums, and figure/table source data are included in the versioned reproducibility archive supplied with this revision.
+All source datasets are publicly available through PhysioNet. The complete analysis code, machine-readable result manifest, frozen checksums, figure/table source data, and versioned reproducibility archive are publicly available in release v1.0.0 at https://github.com/drfatihkoksal/qt-rr-dynamics-revision/releases/tag/v1.0.0.
 
 ## Declaration of generative AI and AI-assisted technologies
 

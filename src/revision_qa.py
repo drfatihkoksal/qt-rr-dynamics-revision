@@ -47,6 +47,9 @@ def main() -> None:
             problems.append(f"{name} lacks continuous line-numbering XML")
 
     manuscript = (PAPER / "manuscript_revised_clean.md").read_text(encoding="utf-8")
+    release_url = "https://github.com/drfatihkoksal/qt-rr-dynamics-revision/releases/tag/v1.0.0"
+    if release_url not in manuscript:
+        problems.append("versioned public repository URL missing from manuscript")
     h = pd.read_csv(ROOT / "revision_work/analysis/hierarchical_effects.csv").set_index("analysis_id")
     numeric_claims = {
         "4.87 ms": h.loc["LTST_018", "effect_ms"],
@@ -74,7 +77,7 @@ def main() -> None:
         "- DOCX integrity: PASS (clean and marked each contain 4 editable tables and 3 figures).\n"
         "- Marked manuscript: all substantive text highlighted because the manuscript was fully rewritten.\n"
         "- Automated pipeline test and Python compilation: run separately in final QA.\n"
-        "- Outstanding external item: a public permanent repository URL cannot be created from the local workspace.\n",
+        "- Public versioned repository: PASS (release v1.0.0 URL included in manuscript).\n",
         encoding="utf-8")
     print("revision QA passed")
 

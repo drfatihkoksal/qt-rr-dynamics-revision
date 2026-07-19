@@ -6,4 +6,4 @@
 - DOCX integrity: PASS (clean and marked each contain 4 editable tables and 3 figures).
 - Marked manuscript: all substantive text highlighted because the manuscript was fully rewritten.
 - Automated pipeline test and Python compilation: run separately in final QA.
-- Outstanding external item: a public permanent repository URL cannot be created from the local workspace.
+- Public versioned repository: PASS (release v1.0.0 URL included in manuscript).
