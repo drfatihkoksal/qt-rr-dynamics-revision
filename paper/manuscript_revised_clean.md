@@ -166,7 +166,8 @@ During preparation, the author used Claude (Anthropic) and Codex (OpenAI) to ass
 
 ```{=latex}
 \clearpage
-\newgeometry{landscape,margin=0.65in}
+\begin{landscape}
+\newgeometry{margin=0.65in}
 \small
 \setlength{\tabcolsep}{3pt}
 ```
@@ -217,3 +218,8 @@ During preparation, the author used Claude (Anthropic) and Codex (OpenAI) to ass
 | Rate-dynamic adjusted | Ischemic vs HR-related | 3.47 | −1.51 to 7.69 | 0.182 | 76 | 1,278 |
 
 Positive values indicate a larger mean absolute residual in the first-named group.
+
+```{=latex}
+\restoregeometry
+\end{landscape}
+```
