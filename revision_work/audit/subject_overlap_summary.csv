@@ -1,0 +1,5 @@
+subject_group,unique_subjects,records_processed,record_leads_processed,raw_ischemic_episodes,raw_hr_episodes,raw_ischemic_duration_s,raw_hr_duration_s,retained_ischemic_episodes,retained_hr_episodes,retained_ischemic_span_s,retained_hr_span_s,retained_ischemic_beats,retained_hr_beats
+both,9,9,20,62,58,60032.0,51342.0,62,58,59981.848,51295.435999999994,92807,76043
+heart_rate_related_only,16,16,32,0,167,0.0,122048.0,0,160,0.0,121149.01999999999,0,202952
+ischemic_only,51,57,130,1053,3,630554.0,382.0,998,0,612115.488,0.0,927377,0
+neither_retained,4,4,8,3,0,348.0,0.0,0,0,0.0,0.0,0,0

@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+message: "If you use this code, please cite the associated manuscript and this software release."
+title: "QT–RR Dynamics Revision Reproducibility Repository"
+version: 1.0.0
+date-released: 2026-07-19
+authors:
+  - family-names: "Köksal"
+    given-names: "Fatih"
+    orcid: "https://orcid.org/0000-0002-4197-4683"
+license: MIT
+repository-code: "https://github.com/drfatihkoksal/qt-rr-dynamics-revision"

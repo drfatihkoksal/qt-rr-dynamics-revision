@@ -1,0 +1,9 @@
+dataset,stage,reason_code,unit,n
+ltstdb,database_catalog,all_catalogued,records,86
+ltstdb,local_source,signal_and_header_available,records,86
+ltstdb,pipeline,successfully_processed,records,86
+ltstdb,primary_analysis,eligible_retained_episode,records,81
+ltstdb,pipeline,successfully_processed,unique_subjects,80
+ltstdb,primary_analysis,eligible_retained_episode,unique_subjects,76
+ltstdb,pipeline,successfully_processed,record_leads,190
+ltstdb,primary_analysis,eligible_retained_episode,episodes,1278

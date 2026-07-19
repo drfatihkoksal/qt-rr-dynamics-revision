@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+*.parquet
+*.pt
+*.dat
+*.atr
+*.hea
+*.sta
+*.stb
+*.stc
+.pytest_cache/
+.DS_Store

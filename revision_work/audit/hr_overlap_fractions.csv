@@ -1,0 +1,5 @@
+definition,unit,numerator,denominator,proportion
+retained_hr_contributors_with_any_raw_ischemic_episode,subjects,9.0,25.0,0.36
+retained_hr_contributors_with_any_raw_ischemic_episode,episodes,58.0,218.0,0.26605504587155965
+retained_hr_contributors_with_any_raw_ischemic_episode,episode_span_s,51295.435999999994,172444.45599999998,0.2974606269742879
+retained_hr_contributors_with_any_raw_ischemic_episode,retained_beats,76043.0,278995.0,0.2725604401512572

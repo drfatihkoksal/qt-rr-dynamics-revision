@@ -1,0 +1,5 @@
+episode_type,direction,episodes,subjects,proportion
+ischemic,negative,545,53,0.5141509433962265
+ischemic,positive,515,40,0.4858490566037736
+rate_related,negative,126,22,0.5779816513761468
+rate_related,positive,92,16,0.42201834862385323

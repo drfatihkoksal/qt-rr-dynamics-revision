@@ -1,0 +1,8 @@
+panel,item,value
+architecture,input,1x500 at 250 Hz
+architecture,channels,"32,64,128,256,512"
+architecture,parameters,5982928
+cohort,catalogued_records,86
+cohort,unique_subjects,80
+cohort,analysis_episodes,1278
+cohort,analysis_eligible_beat_leads,19278075

@@ -1,0 +1,6 @@
+concordance_status,consolidated_label,segments,records,subjects,duration_s
+concordant_multilead,ischemic,689,52,47,260274.0
+concordant_multilead,rate_related,132,18,18,68904.0
+discordant_multilead,discordant,37,4,4,10888.0
+single_active_lead,ischemic,1679,68,62,267214.0
+single_active_lead,rate_related,482,29,29,103384.0
