@@ -101,7 +101,7 @@ def main():
         ax.axvspan(m.qrs_onset_time_s-m.qrs_onset_sigma_ms/1000,m.qrs_onset_time_s+m.qrs_onset_sigma_ms/1000,color='#f58518',alpha=.12)
         ax.axvspan(m.t_offset_time_s-m.t_offset_sigma_ms/1000,m.t_offset_time_s+m.t_offset_sigma_ms/1000,color='#54a24b',alpha=.12)
         ax.set_title(f"{panel}: QT {m.qt_ms:.1f} ms; expected {m.pred_qt_ms:.1f}; residual {m.signed_resid_ms:+.1f} ms")
-        ax.set(xlabel='Time from R peak (s)',ylabel='ECG (mV)',xlim=(-.5,.8));ax.grid(alpha=.15)
+        ax.set(xlabel='Time from R peak (s)',ylabel='ECG (mV)',xlim=(-.25,.55));ax.grid(alpha=.15)
     # Four aligned trends per case.
     for col,(tr,sp,title) in enumerate(((ta,sa,'Case A: same subject/lead'),(tb,sb,'Case B: no annotated ischemic episode'))):
         variables=[('heart_rate_bpm','Heart rate (bpm)'),('st_deviation_uv','ST deviation (µV)'),

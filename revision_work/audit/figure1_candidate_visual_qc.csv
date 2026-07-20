@@ -1,0 +1,8 @@
+subject_id,record,lead,visual_qc_pass,reason
+s2003,s20031,0,0,baseline and ST-T contour instability across representative strips
+s2003,s20031,1,0,visible baseline noise in the initial morphology strip
+s2011,s20111,0,1,stable baseline and clearly interpretable QRS-T morphology in all three strips
+s2031,s20311,0,0,low-amplitude atypical morphology and unstable HR-related contour
+s2031,s20311,1,0,marked baseline drift in the baseline strip
+s2038,s20381,0,1,clean strips but excluded by non-extreme medoid-distance criterion
+s2043,s20431,0,0,high-frequency artifact in the HR-related ST-T segment
