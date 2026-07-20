@@ -2,21 +2,21 @@
 
 ## Highlights
 
-- A deep-learning ECG delineator provided beat-level landmarks and predictive uncertainty.
-- Coverage was near nominal in same-protocol validation but lower in fully held-out records.
-- Both database-labeled episode types had larger absolute QT–RR departures than baseline.
+- Deep-learning ECG delineation yielded landmarks and predictive uncertainty.
+- Coverage was near nominal in validation but lower in fully held-out records.
+- Both database-labeled episode types showed greater QT–RR departure than baseline.
 - The direct between-label comparison did not demonstrate a larger ischemic departure.
-- Label uncertainty, subject overlap, cardiac substrate, and rate dynamics limit interpretation.
+- Label uncertainty, overlap, substrate, and rate dynamics limit interpretation.
 
 ## Abstract
 
-**Background:** We evaluated a deep-learning ECG delineator and used it to compare QT–RR dynamics during database-labeled ischemic and heart-rate-related ST episodes.
+**Background:** We evaluated uncertainty-aware ECG delineation and compared QT–RR dynamics during database-labeled ischemic and heart-rate-related ST episodes.
 
-**Methods:** A one-dimensional U-Net-style model was pretrained on the Lobachevsky University Electrocardiography Database and fine-tuned on the QT Database (QTDB). Landmark and direct-QT errors and prediction-interval coverage were evaluated in same-protocol validation data and 11 fully held-out, dual-annotated QTDB records. The model was then applied to all 86 Long-Term ST Database (LTST DB) records (80 unique subjects). Absolute and signed deviations from an individualized, hysteresis-adjusted QT–RR relation were summarized by episode and subject. The primary contrast compared database-labeled ischemic with heart-rate-related episodes; secondary contrasts used episode-matched baseline. Subject overlap, rate dynamics, hysteresis, and annotation protocols were examined in sensitivity analyses.
+**Methods:** A 1D U-Net was pretrained on the Lobachevsky University Electrocardiography Database, fine-tuned on the QT Database, and evaluated for landmark accuracy and direct-QT prediction-interval coverage in same-protocol validation and 11 fully held-out, dual-annotated records. The model was applied to all 86 Long-Term ST Database records (80 subjects). Absolute and signed deviations from individualized, hysteresis-adjusted QT–RR relations were summarized by episode and subject. The primary contrast compared ischemic with heart-rate-related episodes using unique-subject bootstrap; secondary contrasts used matched baseline.
 
-**Results:** Under the primary `.stb` annotation protocol, the equal-subject difference in mean absolute residual was 4.87 ms (95% confidence interval [CI], −0.34 to 10.23; p=0.065) for ischemic versus heart-rate-related episodes; unique-subject bootstrap retained both summaries for nine overlapping subjects. A larger ischemic departure was not demonstrated under the primary protocol, although estimates were annotation-protocol sensitive. Relative to matched baseline, absolute residual increased by 7.67 ms (95% CI, 5.06 to 10.95) during 1,060 ischemic episodes from 60 subjects and by 4.57 ms (95% CI, 2.34 to 6.90) during 218 heart-rate-related episodes from 25 subjects. Nine of 25 subjects contributing retained heart-rate-related episodes also had an annotated ischemic episode; these subjects contributed 58/218 (26.6%) heart-rate-related episodes. The overlap interaction was imprecise (2.54 ms; 95% CI, −2.50 to 7.57; p=0.305). Rate-dynamic adjustment attenuated the heart-rate-related-versus-baseline estimate to 2.23 ms (95% CI, −0.50 to 4.97), and the adjusted direct estimate was 3.47 ms (95% CI, −1.51 to 7.69). Direct-QT 95% interval coverage under the independence approximation was 96.7% in same-protocol validation and 90.6% and 95.3% in the two held-out annotation sets; covariance-aware coverage was 90.5%, 85.2%, and 92.0%, respectively.
+**Results:** Under the primary annotation protocol, the ischemic-minus-heart-rate-related difference in mean absolute residual was 4.87 ms (95% confidence interval [CI], −0.34 to 10.23; p=0.065); therefore, a larger ischemic departure was not demonstrated, and estimates varied by annotation protocol. Relative to baseline, residual increased by 7.67 ms (95% CI, 5.06 to 10.95) during 1,060 ischemic episodes from 60 subjects and by 4.57 ms (95% CI, 2.34 to 6.90) during 218 heart-rate-related episodes from 25 subjects. Nine of 25 heart-rate-related contributors also had ischemic episodes. Rate adjustment attenuated the heart-rate-related baseline contrast. Direct-QT 95% prediction-interval coverage was 96.7% in same-protocol validation and 90.6%/95.3% against held-out annotators; covariance-aware coverage was lower.
 
-**Conclusions:** Both database-labeled episode types were associated with greater absolute QT–RR departure than matched baseline. Under the primary `.stb` protocol, the direct comparison did not demonstrate a larger departure during ischemic episodes, although estimates were annotation-protocol sensitive. This does not exclude an ischemic repolarization effect or establish physiological equivalence. ECG-based label uncertainty, subject-level overlap and substrate, and residual rate/hysteresis effects constrain mechanistic interpretation. Prediction-interval transportability was limited on fully held-out records.
+**Conclusions:** Both labeled episode types showed greater QT–RR departure than baseline. The primary direct comparison did not establish a larger ischemic effect or physiological equivalence. Label uncertainty, subject overlap, substrate, rate dynamics, and limited uncertainty transportability constrain interpretation.
 
 **Keywords:** electrocardiography; QT interval; myocardial ischemia; deep learning; uncertainty; ambulatory monitoring
 

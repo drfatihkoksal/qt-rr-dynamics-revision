@@ -54,6 +54,19 @@ def main() -> None:
             problems.append(f"{name} lacks native Word equation objects")
 
     manuscript = (PAPER / "manuscript_revised_clean.md").read_text(encoding="utf-8")
+    abstract = manuscript.split("## Abstract", 1)[1].split("**Keywords:**", 1)[0]
+    abstract_plain = re.sub(r"[*`]", "", abstract)
+    if len(abstract_plain.split()) > 250:
+        problems.append(f"abstract exceeds 250 words: {len(abstract_plain.split())}")
+    highlights = [line[2:] for line in (PAPER / "highlights_revised.md").read_text(
+        encoding="utf-8").splitlines() if line.startswith("- ")]
+    if not 3 <= len(highlights) <= 5:
+        problems.append(f"highlight count outside 3–5: {len(highlights)}")
+    for index, highlight in enumerate(highlights, 1):
+        if len(highlight) > 85:
+            problems.append(f"highlight {index} exceeds 85 characters: {len(highlight)}")
+    if not (PAPER / "docx_revision/highlights.docx").exists():
+        problems.append("separate editable highlights DOCX missing")
     blinded_text = "\n".join((PAPER / name).read_text(encoding="utf-8") for name in [
         "manuscript_revised_clean.md", "supplement_revised.md", "response_to_reviewers.md"
     ])
@@ -108,6 +121,7 @@ def main() -> None:
         "- Marked manuscript: all substantive text highlighted because the manuscript was fully rewritten.\n"
         "- Automated pipeline test and Python compilation: run separately in final QA.\n"
         "- Blinding: PASS (author-identifying repository excluded from manuscript, supplement, response, and blinded archive).\n"
+        "- Journal limits: PASS (structured abstract <=250 words; five highlights <=85 characters; separate editable highlights DOCX).\n"
         "- Public versioned repository: PASS (release v1.1.0 URL confined to author-facing documents).\n",
         encoding="utf-8")
     print("revision QA passed")

@@ -7,4 +7,5 @@
 - Marked manuscript: all substantive text highlighted because the manuscript was fully rewritten.
 - Automated pipeline test and Python compilation: run separately in final QA.
 - Blinding: PASS (author-identifying repository excluded from manuscript, supplement, response, and blinded archive).
+- Journal limits: PASS (structured abstract <=250 words; five highlights <=85 characters; separate editable highlights DOCX).
 - Public versioned repository: PASS (release v1.1.0 URL confined to author-facing documents).

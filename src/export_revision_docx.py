@@ -115,6 +115,7 @@ def main() -> None:
         "cover_letter_revised.md": "cover_letter_revised.docx",
         "title_page_revised.md": "title_page_revised.docx",
         "supplement_revised.md": "supplement_revised.docx",
+        "highlights_revised.md": "highlights.docx",
     }
     for source, target in mapping.items():
         pandoc(source, str(OUT / target))
