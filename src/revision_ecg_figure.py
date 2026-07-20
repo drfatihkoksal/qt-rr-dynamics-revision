@@ -91,7 +91,7 @@ def main():
     bstart=min(b.first_sample_episode,b.first_sample_baseline)-5*60*FS;bstop=max(b.last_sample_episode,b.last_sample_baseline)+5*60*FS
     ta,sa=trend_data(con,ai.record,ai.lead,astart,astop,'A');tb,sb=trend_data(con,b.record,b.lead,bstart,bstop,'B')
     pd.concat([ta,tb]).to_csv(SOURCE/'figure1_trends.csv',index=False);pd.concat([sa,sb]).to_csv(SOURCE/'figure1_episode_spans.csv',index=False)
-    fig=plt.figure(figsize=(13,13),layout='constrained');gs=fig.add_gridspec(8,2)
+    fig=plt.figure(figsize=(13,13.5),layout='constrained');gs=fig.add_gridspec(8,2)
     # Five morphology strips.
     positions=[(0,0),(1,0),(2,0),(0,1),(1,1)]
     for (panel,_),pos in zip([(x[0],x[1]) for x in specs],positions):
@@ -114,8 +114,10 @@ def main():
             if j==7:ax.set_xlabel('Hours from displayed-window start')
     handles=[plt.Line2D([0],[0],color='#d95f5f',lw=8,alpha=.25,label='Database-labeled ischemic'),
              plt.Line2D([0],[0],color='#4c78a8',lw=8,alpha=.25,label='Database-labeled HR-related')]
-    fig.legend(handles=handles,loc='lower center',ncol=2);fig.savefig(FIG/'figure1_ecg_examples.png',dpi=300)
-    fig.savefig(FIG/'figure1_ecg_examples.tiff',dpi=300,pil_kwargs={'compression':'tiff_lzw'})
+    fig.legend(handles=handles,loc='upper center',bbox_to_anchor=(.5,-.025),ncol=2)
+    fig.savefig(FIG/'figure1_ecg_examples.png',dpi=300,bbox_inches='tight',pad_inches=.18)
+    fig.savefig(FIG/'figure1_ecg_examples.tiff',dpi=300,bbox_inches='tight',pad_inches=.18,
+                pil_kwargs={'compression':'tiff_lzw'})
     con.close();print(meta.to_string(index=False))
 
 

@@ -120,7 +120,7 @@ Same-protocol direct-QT coverage was near nominal under the original independenc
 
 ### 4.1 Limitations
 
-Episode labels were ECG-based and did not independently verify ischemia. Episode type was partly confounded by subject, and only nine subjects supported a paired direct contrast. Clinical headers were historical and incomplete. Beat-level observations were highly dependent, although episode- and equal-subject inference reduced reliance on beat count. The linear QT–RR and exponential hysteresis model may not fully capture rapid rate change, autonomic state, or nonlinear response. Baseline selection matched duration and temporal proximity but not time of day; incomplete balance was addressed only by covariate sensitivity analysis. Analysis was restricted to `N`-labeled beats, but adjacent ectopy and conduction abnormalities were not separately excluded. Absolute residual gives no direction. Delineation error may vary with ST–T morphology. Landmark covariance was estimated in a modest validation set and QT uncertainty was not validated against expert ambulatory labels. Held-out undercoverage limits transportability. One development seed/model was used. LTST DB is not representative of an unselected Holter population.
+Episode labels were ECG-based and did not independently verify ischemia. Episode type was partly confounded by subject, and only nine subjects supported a paired direct contrast. Clinical headers were historical and incomplete. Beat-level observations were highly dependent, although episode- and equal-subject inference reduced reliance on beat count. Beat locations and `N`-beat labels were taken from database annotations; end-to-end R-peak detection and beat classification were not evaluated. The linear QT–RR and exponential hysteresis model may not fully capture rapid rate change, autonomic state, or nonlinear response. Baseline selection matched duration and temporal proximity but not time of day; incomplete balance was addressed only by covariate sensitivity analysis. Analysis was restricted to `N`-labeled beats, but adjacent ectopy and conduction abnormalities were not separately excluded. Absolute residual gives no direction. Delineation error may vary with ST–T morphology. Landmark covariance was estimated in a modest validation set and QT uncertainty was not validated against expert ambulatory labels. Held-out undercoverage limits transportability. One development seed/model was used. LTST DB is not representative of an unselected Holter population.
 
 ## 5. Conclusions
 
@@ -154,13 +154,13 @@ During preparation, the author used Claude (Anthropic) and Codex (OpenAI) to ass
 
 **Figure 1.** Reproducibly selected ECG examples and time-aligned trends. Case A is a subject with both database labels; Case B has no annotated ischemic episode. Raw single-lead ECG is shown with QRS onset, T offset, prediction uncertainty, and analyzed quantities. Longer panels show heart rate, ST deviation, signed and absolute QT–RR residual, and QT uncertainty. Examples are illustrative, not proof of cohort effects.
 
-![](figures_revision/figure1_ecg_examples.png)
-
 **Figure 2.** Subject- and episode-level absolute QT–RR effects. Points show individual units; summaries show estimates and 95% confidence intervals. The symlog episode axis preserves extreme observations without allowing them to determine visual scale.
 
-![](figures_revision/figure2_subject_episode_effects.png)
+**Figure 3.** Empirical coverage of T-offset and direct-QT prediction intervals in same-protocol validation and fully held-out records. Panel B shows direct-QT intervals under the independence approximation; covariance-aware direct-QT coverage is reported in Table 2. The diagonal denotes nominal coverage.
 
-**Figure 3.** Landmark and direct-QT empirical prediction-interval coverage in same-protocol validation and fully held-out records against annotators 1 and 2. The diagonal denotes nominal coverage. Covariance-aware QT intervals use correlation estimated in same-protocol validation.
+![](figures_revision/figure1_ecg_examples.png)
+
+![](figures_revision/figure2_subject_episode_effects.png)
 
 ![](figures_revision/figure3_calibration.png)
 

@@ -17,13 +17,13 @@ Thank you for the detailed and constructive review. We reprocessed the full LTST
 
 **Response:** We agree that the submitted Methods were not sufficiently reviewable. The revised Methods section now provides an intuitive description of the two aims, units, network, direct-QT uncertainty, QT–RR reference, matching, and inferential hierarchy. Supplementary Sections S1–S3 give the exact input, layer channels, kernels, loss equations and coefficients, landmark-presence rule, optimizer, scheduler, batch size, stopping rule, seed, split logic, hysteresis equation, matching rule, statistical estimands, cluster definition, bootstrap/permutation procedure, and multiplicity family. The model has 5,982,928 trainable parameters. Code, tests, the software environment, machine-readable outputs, and the exact revision archive are supplied in a blinded review archive.
 
-**Changes in the manuscript:** Methods, Sections 2.1–2.5, lines 50–121; Supplementary Sections S1–S3; Supplementary Figure S5; Data and Code Availability, lines 247–251.
+**Changes in the manuscript:** Methods, Sections 2.1–2.5, lines 50–121; Supplementary Sections S1–S3; Supplementary Figure S5; Data and Code Availability, lines 248–252.
 
 > 2. The text of the manuscript is difficult to read and to understand. This reviewer respectfully suggests using an comprehensible human writing.
 
 **Response:** We rewrote the complete manuscript. The revision separates the three scientific comparisons, defines “absolute residual” in plain language, moves implementation equations to the Supplement, removes rhetorical and mechanistic claims, and leads each Results paragraph with effect estimates and confidence intervals. The title was changed from “Detecting Ischemia-Specific” to the neutral “QT–RR Dynamics During Ischemic and Heart-Rate–Related ST Episodes.”
 
-**Changes in the manuscript:** The manuscript was revised throughout; title and Highlights, lines 1–9; Abstract, lines 10–31; main text, lines 32–255; and tables, lines 300–306.
+**Changes in the manuscript:** The manuscript was revised throughout; title and Highlights, lines 1–9; Abstract, lines 10–31; main text, lines 32–256; and tables, lines 301–307.
 
 > 3. From a pathophysiological point of view, it seems very unlikely that ischemic events would have no impact on ventricular repolarization properties. Accordingly, the result stating that "ischemic vs rate-related contrast is null" is highly questionable. ECG strips during and outside ischemic episodes should be shown to corroborate the results.
 
@@ -31,7 +31,7 @@ Thank you for the detailed and constructive review. We reprocessed the full LTST
 
 We added new Figure 1. Case A shows baseline, database-labeled ischemic, and heart-rate-related ECG segments from the same subject; Case B shows baseline and a heart-rate-related episode in a subject without an annotated ischemic episode. QRS onset, T offset, model uncertainty, measured and predicted QT, signed and absolute residual, heart rate, ST deviation, and longer time-aligned trends are displayed. Cases were selected reproducibly as closest to prespecified subgroup medians, not by maximum effect. The selected identifiers and plotted source data are supplied.
 
-**Changes in the manuscript:** Methods, Section 2.5, lines 99–121; Results, Sections 3.3–3.5, lines 142–186; Discussion and Limitations, lines 187–237; Figure 1 legend, lines 286–290.
+**Changes in the manuscript:** Methods, Section 2.5, lines 99–121; Results, Sections 3.3–3.5, lines 142–186; Discussion and Limitations, lines 187–238; Figure 1 legend, lines 288–291.
 
 ## Reviewer 2
 
@@ -57,7 +57,7 @@ We also tested rate dynamics. Adjustment for dynamic rate preserved the ischemic
 
 The heart-rate-related-versus-baseline equal-subject effect was 6.20 ms (95% CI, 3.00 to 9.68) in nine subjects with any raw ischemic annotation and 3.66 ms (95% CI, 0.78 to 6.67) in 16 subjects without one. The interaction was 2.54 ms (95% CI, −2.50 to 7.57; p=0.305). Similar unadjusted associations suggest that same-subject overlap may not be the sole explanation, but the imprecise interaction and attenuation after rate-dynamic adjustment preclude a firm conclusion. The nine-subject within-subject direct comparison is presented as a limited sensitivity analysis.
 
-**Changes in the manuscript:** Results, Sections 3.2–3.4, lines 135–178; Discussion, lines 187–225; Tables 1 and 4A, lines 300–304; Supplementary Section S4 and Tables S1–S2.
+**Changes in the manuscript:** Results, Sections 3.2–3.4, lines 135–178; Discussion, lines 187–225; Tables 1 and 4A, lines 301–305; Supplementary Section S4 and Tables S1–S2.
 
 > - If there is a true consistency between (a) ischemic events and (b) rate-related non-ischemic events from patients without any ischemic episodes; then consider providing some discussion on the non-ischemic patients in the LTST DB: are they generally characterised by advanced disease and increased cardiac risk? Would you expect the consistency to be replicated in any Holter dataset?
 
@@ -65,13 +65,13 @@ The heart-rate-related-versus-baseline equal-subject effect was 6.20 ms (95% CI,
 
 We added a generalizability paragraph stating that LTST DB is a selected ambulatory ST-abnormality cohort and that neither substrate nor effect estimates should be expected automatically in an unselected Holter dataset. The EDB analysis is now described only as a generic ST-episode-versus-baseline association (9.07 ms; 95% CI, 5.32 to 13.58), not replication of ischemia specificity.
 
-**Changes in the manuscript:** Results, Sections 3.4–3.5, lines 155–186; Discussion and Limitations, lines 187–237; Table 4A, line 304; Supplementary Sections S4 and S7 and Supplementary Table S2.
+**Changes in the manuscript:** Results, Sections 3.4–3.5, lines 155–186; Discussion and Limitations, lines 187–238; Table 4A, line 305; Supplementary Sections S4 and S7 and Supplementary Table S2.
 
 > Please consider providing some of the above discussion to steel-man the interpretation of your results, and orient the reader as to the range of their validity.
 
 **Response:** The Discussion was reorganized around label meaning, subject overlap and substrate, rate dynamics/hysteresis, signed direction, measurement uncertainty, and generalizability. We explicitly state that the primary interval includes effects in both directions; a non-significant p value is not treated as equivalence. Signed analyses showed mixed directions—51.4% of ischemic and 57.8% of heart-rate-related episodes had negative median residual—so absolute residual is not called QT prolongation. We believe these changes define the validity range more accurately and transparently.
 
-**Changes in the manuscript:** Discussion and Limitations, lines 187–237; Conclusion, lines 238–246; Supplementary Figures S1–S5.
+**Changes in the manuscript:** Discussion and Limitations, lines 187–238; Conclusion, lines 239–247; Supplementary Figures S1–S5.
 
 ## Additional data-integrity changes
 
